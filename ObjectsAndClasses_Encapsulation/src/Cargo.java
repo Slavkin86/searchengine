@@ -4,15 +4,6 @@ public class Cargo {
     private final String address;
 
     private final boolean mayFlip;
-
-    public boolean isMayFlip() {
-        return mayFlip;
-    }
-
-    public boolean isFragile() {
-        return isFragile;
-    }
-
     private final String regNumber;
     private final boolean isFragile;
 
@@ -33,16 +24,25 @@ public class Cargo {
     public Cargo setMass(double mass) {
         return new Cargo(dimensions, mass, address, mayFlip, regNumber, isFragile);
     }
+    public Dimensions getDimensions() {
+        return dimensions;
+    }
     public double getMass() {
         return mass;
     }
-
     public String getAddress() {
         return address;
     }
 
     public String getRegNumber() {
         return regNumber;
+    }
+    public boolean isMayFlip() {
+        return mayFlip;
+    }
+
+    public boolean isFragile() {
+        return isFragile;
     }
     public String toString() {
         return ("габариты - " + dimensions.toString() + "\n" +
