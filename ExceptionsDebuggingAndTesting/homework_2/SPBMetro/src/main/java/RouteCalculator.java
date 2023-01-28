@@ -20,16 +20,13 @@ public class RouteCalculator {
         if (route != null) {
             return route;
         }
-
         route = getRouteWithOneConnection(from, to);
-        if (route != null) {
+        if (route != null && route.size() != 0) {
             return route;
+        } else {
+            return route = getRouteWithTwoConnections(from, to);
         }
-
-        route = getRouteWithTwoConnections(from, to);
-        return route;
     }
-
     public static double calculateDuration(List<Station> route) {
         double duration = 0;
         Station previousStation = null;
@@ -120,7 +117,7 @@ public class RouteCalculator {
 
     private List<Station> getRouteWithTwoConnections(Station from, Station to) {
         if (from.getLine().equals(to.getLine())) {
-            return null;
+            return getRouteOnTheLine(from, to);
         }
 
         ArrayList<Station> route = new ArrayList<>();

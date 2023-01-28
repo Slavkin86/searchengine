@@ -5,12 +5,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class StationIndex {
-    private final Map<Integer, Line> number2line;
+    private final Map<Integer, Line> numberline;
     private final TreeSet<Station> stations;
     private final Map<Station, TreeSet<Station>> connections;
 
     public StationIndex() {
-        number2line = new HashMap<>();
+        numberline = new HashMap<>();
         stations = new TreeSet<>();
         connections = new TreeMap<>();
     }
@@ -20,7 +20,7 @@ public class StationIndex {
     }
 
     public void addLine(Line line) {
-        number2line.put(line.getNumber(), line);
+        numberline.put(line.getNumber(), line);
     }
 
     public void addConnection(List<Station> stations) {
@@ -35,7 +35,7 @@ public class StationIndex {
     }
 
     public Line getLine(int number) {
-        return number2line.get(number);
+        return numberline.get(number);
     }
 
     public Station getStation(String name) {
