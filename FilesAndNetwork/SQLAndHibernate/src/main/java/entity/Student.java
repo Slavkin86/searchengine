@@ -1,26 +1,43 @@
 package entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Table;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import javax.persistence.*;
-import java.util.Date;
+
 @Entity
 @Table(name = "Students")
-public class Student {
+
+public class Student implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "id", unique = true, insertable=false, updatable=false)
+    private Integer id;
 
     private String name;
 
     private int age;
 
     @Column(name = "registration_date")
-    private Date registrationDate;
+    private LocalDateTime registrationDate;
 
-    public int getId() {
+    @ManyToMany(mappedBy="students")
+    private List<Course> courses;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscription> subscriptions;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LinkedPurchaseList> linkedPurchaseList;
+
+
+
+
+//-------------------------------------------------------------
+
+    public Integer getId() {
         return id;
     }
 
@@ -44,11 +61,39 @@ public class Student {
         this.age = age;
     }
 
-    public Date getRegistrationDate() {
+    public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public List<LinkedPurchaseList> getLinkedPurchaseList() {
+        return linkedPurchaseList;
+    }
+
+    public void setLinkedPurchaseList(List<LinkedPurchaseList> linkedPurchaseList) {
+        this.linkedPurchaseList = linkedPurchaseList;
+    }
+
+
+
+
 }

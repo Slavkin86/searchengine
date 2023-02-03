@@ -1,52 +1,97 @@
 package entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import org.hibernate.annotations.Table;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
 @Table(name = "Subscriptions")
-public class Subscription {
+public class Subscription implements Serializable  {
 
     @EmbeddedId
-    private Key id;
+    private SubscriptionId subscriptionId;
 
-    @Column(name = "student_id", insertable = false, updatable = false)
-    private int studentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("courseId")
+    private Course course;
 
-    @Column(name = "course_id", insertable = false, updatable = false)
-    private int courseId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("studentId")
+    private Student student;
+
     @Column(name = "subscription_date")
-    private Date subscriptionDate;
+    private LocalDateTime subscriptionDate;
 
-    public int getStudentId() {
-        return studentId;
+    private  Subscription () {}
+
+    public Subscription(Student student, Course course) {
+        this.student = student;
+        this.course = course;
+        this.subscriptionId = new Subscription.SubscriptionId(student.getId(), course.getId());
+
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    @EqualsAndHashCode
+    @Embeddable
+    public static class SubscriptionId implements Serializable {
+
+        @Getter
+        @Setter
+        @Column(name = "student_id")
+        private Integer studentId;
+
+        @Getter
+        @Setter
+        @Column(name = "course_id")
+        private Integer courseId;
+
+        private SubscriptionId() { }
+
+        public SubscriptionId(Integer studentId, Integer courseId) {
+            this.studentId = studentId;
+            this.courseId = courseId;
+
+        }
+
     }
 
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
-    public Date getSubscriptionDate() {
+    public LocalDateTime getSubscriptionDate() {
         return subscriptionDate;
     }
 
-    public void setSubscriptionDate(Date subscriptionDate) {
+    public void setSubscriptionDate(LocalDateTime subscriptionDate) {
         this.subscriptionDate = subscriptionDate;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public SubscriptionId getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public void setSubscriptionId(SubscriptionId subscriptionId) {
+        this.subscriptionId = subscriptionId;
     }
 }

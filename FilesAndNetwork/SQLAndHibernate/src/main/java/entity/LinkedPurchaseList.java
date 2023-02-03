@@ -1,64 +1,100 @@
 package entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Table;
-
-import javax.persistence.*;
-import java.util.Date;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "LinkedPurchaseList")
-public class LinkedPurchaseList {
+@IdClass(LinkedPurchaseList.LinkedPurchaseListId.class)
+public class LinkedPurchaseList implements Serializable {
 
+    @Id
+    @Column(name = "student_id", columnDefinition = "int(10) unsigned", nullable = false)
+    Integer studentId;
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
+    @Id
+    @Column(name = "course_id", columnDefinition = "int(10) unsigned", nullable = false)
+    Integer courseId;
 
-    @EmbeddedId
-    private PurchaseList.Id id;
+    @Column(name = "price", columnDefinition = "int(10) unsigned", nullable = false)
+    Integer  price;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", updatable = false, insertable = false)
-    private Student student;
-
-    @ManyToOne
-    @JoinColumn(name = "course_id", updatable = false, insertable = false)
+    @MapsId("courseId")
     private Course course;
 
-    @Column(name = "price")
-    private Integer price;
+    @ManyToOne
+    @MapsId("studentId")
+    private Student student;
 
-    @Column(name = "subscription_date")
-    private Date subscriptionDate;
+    @Column(name = "date", columnDefinition = "datetime", nullable = false)
+    private LocalDateTime subscriptionDate;
 
-    public LinkedPurchaseList() {
-    }
+    private  LinkedPurchaseList () {}
 
-
-    public Key getId() {
-        return id;
-    }
-
-    public LinkedPurchaseList(Key id, Student student, Course course, int price,
-                              Date subscriptionDate) {
-        this.id = id;
+    public LinkedPurchaseList(Student student, Course course) {
         this.student = student;
         this.course = course;
-        this.price = price;
+
+    }
+
+    @EqualsAndHashCode
+    @Embeddable
+    public static class LinkedPurchaseListId implements Serializable {
+
+        @Getter
+        @Setter
+        Integer studentId;
+
+        @Getter
+        @Setter
+        Integer courseId;
+
+        public LinkedPurchaseListId(Integer studentId, Integer courseId) {
+            this.studentId = studentId;
+            this.courseId = courseId;
+        }
+
+        private LinkedPurchaseListId() { }
+
+
+
+    }
+
+    public int getCourseId() {
+        return course.getId();
+    }
+
+    public void setCourseId(int id) {
+        course.setId(id);
+    }
+
+    public int getStudentId() {
+        return student.getId();
+    }
+
+    public void setStudentId(int id) {
+        student.setId(id);
+    }
+
+    public int getCoursePrice() {
+        return course.getPrice();
+    }
+
+    public void setCoursePrice(int price) {
+        course.setPrice(price);
+    }
+
+    public LocalDateTime getSubscriptionDate() {
+        return subscriptionDate;
+    }
+
+    public void setSubscriptionDate(LocalDateTime subscriptionDate) {
         this.subscriptionDate = subscriptionDate;
-    }
-
-    public void setId(Key id) {
-        this.id = id;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
     }
 
     public Course getCourse() {
@@ -69,19 +105,15 @@ public class LinkedPurchaseList {
         this.course = course;
     }
 
-    public int getPrice() {
-        return price;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public Date getSubscriptionDate() {
-        return subscriptionDate;
-    }
 
-    public void setSubscriptionDate(Date subscriptionDate) {
-        this.subscriptionDate = subscriptionDate;
-    }
+
+
 }

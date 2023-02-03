@@ -1,16 +1,28 @@
 package entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import org.hibernate.annotations.Table;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Teachers")
 public class Teacher {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String name;
+
+    private int age;
+
+    private int salary;
+
+    @OneToMany(mappedBy="teacher")
+    private List<Course> courses;
+
+
+    //-------------------------------------
 
     public int getId() {
         return id;
@@ -28,14 +40,6 @@ public class Teacher {
         this.name = name;
     }
 
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
     public int getAge() {
         return age;
     }
@@ -44,13 +48,21 @@ public class Teacher {
         this.age = age;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    public int getSalary() {
+        return salary;
+    }
 
-    private String name;
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
 
-    private int salary;
+    public List<Course> getCourses() {
+        return courses;
+    }
 
-    private int age;
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+
 }

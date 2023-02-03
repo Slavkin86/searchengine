@@ -1,47 +1,73 @@
 package entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import org.hibernate.annotations.Table;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PurchaseList")
 public class PurchaseList {
 
-
     @EmbeddedId
-    Id id;
+    private PurchaseListId purchaseListId;
 
-    @Column(name = "student_name", updatable = false, insertable = false)
+    @Column(name = "student_name", insertable=false, updatable=false)
     private String studentName;
 
-    @Column(name = "course_name", updatable = false, insertable = false)
+    @Column(name = "course_name", insertable=false, updatable=false)
     private String courseName;
 
-    @Column(name = "price")
     private int price;
 
     @Column(name = "subscription_date")
-    private Date subscriptionDate;
+    private LocalDateTime subscriptionDate;
 
-    public PurchaseList() {
+    public PurchaseList(String studentName, String courseName) {
+        this.studentName = studentName;
+        this.courseName = courseName;
+        this.purchaseListId = new PurchaseListId(studentName, courseName);
+
     }
 
+    public PurchaseList() { }
 
-    public Id getId() {
-        return id;
+
+    public PurchaseListId getPurchaseListId() {
+        return purchaseListId;
     }
 
-    public void setId(Id id) {
-        this.id = id;
+    public void setPurchaseListId(PurchaseListId purchaseListId) {
+        this.purchaseListId = purchaseListId;
     }
+
+    @EqualsAndHashCode
+    @Embeddable
+    public static class PurchaseListId implements Serializable {
+
+        @Getter
+        @Setter
+        @Column(name = "student_name")
+        private String studentName;
+
+        @Getter
+        @Setter
+        @Column(name = "course_name")
+        private String courseName;
+
+        private PurchaseListId() { }
+
+        public PurchaseListId(String studentName, String courseName) {
+            this.studentName = studentName;
+            this.courseName = courseName;
+        }
+
+
+    }
+
 
     public String getStudentName() {
         return studentName;
@@ -67,58 +93,11 @@ public class PurchaseList {
         this.price = price;
     }
 
-    public Date getSubscriptionDate() {
+    public LocalDateTime getSubscriptionDate() {
         return subscriptionDate;
     }
 
-    public void setSubscriptionDate(Date subscriptionDate) {
+    public void setSubscriptionDate(LocalDateTime subscriptionDate) {
         this.subscriptionDate = subscriptionDate;
-    }
-
-    @Embeddable
-    public static class Id implements Serializable {
-
-        @Column(name = "student_name")
-        private String studentName;
-
-        @Column(name = "course_name")
-        private String courseName;
-
-        public String getStudentName() {
-            return studentName;
-        }
-
-        public void setStudentName(String studentName) {
-            this.studentName = studentName;
-        }
-
-        public String getCourseName() {
-            return courseName;
-        }
-
-        public void setCourseName(String courseName) {
-            this.courseName = courseName;
-        }
-
-        public Id() {
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Id id = (Id) o;
-            return Objects.equals(studentName, id.studentName) &&
-                    Objects.equals(courseName, id.courseName);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(studentName, courseName);
-        }
     }
 }
