@@ -5,19 +5,19 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.sun.tools.javac.comp.Todo;
+import model.Todo;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class TodoService {
-    private static List<Todo> todos = new ArrayList<Todo>();
+    private static List<model.Todo> todos = new ArrayList<model.Todo>();
     private static int todoCount = 0;
 
 
-    public List<Todo> retrieveTodos(String user) {
-        List<Todo> filteredTodos = new ArrayList<Todo>();
-        for (Todo todo : todos) {
+    public List<model.Todo> retrieveTodos(String user) {
+        List<model.Todo> filteredTodos = new ArrayList<model.Todo>();
+        for (model.Todo todo : todos) {
             if (todo.getUser().equals(user)) {
                 filteredTodos.add(todo);
             }
@@ -27,11 +27,11 @@ public class TodoService {
 
     public void addTodo(String name, String desc, Date targetDate,
                         boolean isDone) {
-        todos.add(new Todo(++todoCount, name, desc, targetDate, isDone));
+        todos.add(new model.Todo(++todoCount, name, desc, targetDate, isDone));
     }
 
     public void deleteTodo(int id) {
-        Iterator<Todo> iterator = todos.iterator();
+        Iterator<model.Todo> iterator = todos.iterator();
         while (iterator.hasNext()) {
             Todo todo = iterator.next();
             if (todo.getId() == id) {

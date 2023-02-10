@@ -1,5 +1,6 @@
 package main;
 
+import model.ToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +16,7 @@ import java.util.Date;
 
 public class ToDoController {
     @Autowired
+    private ToDoRepository toDoRepository;
     TodoService service;
 
     @RequestMapping(value="/list-todos", method = RequestMethod.GET)

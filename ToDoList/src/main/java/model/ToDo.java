@@ -1,8 +1,10 @@
-package main;
+package model;
 
 import java.util.Date;
-
+@Entity
 public class Todo {
+    @ID
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String user;
     private String desc;
