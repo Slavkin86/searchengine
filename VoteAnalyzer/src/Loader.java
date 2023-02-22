@@ -12,37 +12,19 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Loader {
-    private static SimpleDateFormat birthDayFormat = new SimpleDateFormat("yyyy.MM.dd");
-    private static SimpleDateFormat visitDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-
-    private static HashMap<Integer, WorkTime> voteStationWorkTimes = new HashMap<>();
-    private static HashMap<Voter, Integer> voterCounts = new HashMap<>();
-
     public static void main(String[] args) throws Exception {
-        String fileName = "res/data-18M.xml";
+        String fileName = "res/data-1572M.xml";
+        long start = System.currentTimeMillis();
 
-        // parseFileDom(fileName); DOM Парсер
-        // printResults();
-
-
-        parseFileSax(fileName); // SAX Парсер
-
-        long usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        System.out.printf("Used memory: %,.2f Mb%n", (double) usage / Math.pow(2, 20));
-    }
-    private static void parseFileSax(String fileName) throws Exception {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser parser = factory.newSAXParser();
         XMLHandler handler = new XMLHandler();
         parser.parse(new File(fileName), handler);
-        handler.printDublicatedVoters();
+
+        System.out.println("Parsing duration - " + (System.currentTimeMillis() - start) + " ms");
+//        DBConnection.printVoterCounts();
+
     }
-
-    private static void parseFileDom(String fileName) throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(new File(fileName));
-
 //    private static void printResults()
 //    {
 //        System.out.println("Voting station work times: ");
@@ -105,4 +87,3 @@ public class Loader {
 //        }
 //    }
     }
-}
